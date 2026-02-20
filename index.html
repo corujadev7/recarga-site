@@ -1,0 +1,696 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Recarga Fácil | Recargas para Telefone Pré-Pago</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="./css/style.css">
+</head>
+
+<body class="bg-gray-50">
+    <!-- Header/Navbar -->
+    <header class="sticky top-0 z-50 gradient-bg text-white shadow-lg">
+        <div class="container mx-auto px-4 py-3">
+            <div class="flex justify-between items-center">
+                <div class="flex items-center space-x-2">
+                    <i class="fas fa-mobile-alt text-2xl"></i>
+                    <h1 class="text-2xl font-bold">Recarga<span class="text-yellow-300">Fácil</span></h1>
+                </div>
+
+                <nav class="hidden md:flex space-x-8">
+                    <a href="#inicio" class="hover:text-yellow-300 transition duration-300">Início</a>
+                    <a href="#como-funciona" class="hover:text-yellow-300 transition duration-300">Como Funciona</a>
+                    <a href="#planos" class="hover:text-yellow-300 transition duration-300">Planos</a>
+                    <a href="#operadoras" class="hover:text-yellow-300 transition duration-300">Operadoras</a>
+                    <a href="#contato" class="hover:text-yellow-300 transition duration-300">Contato</a>
+                </nav>
+
+                <div class="flex items-center space-x-4">
+                    <button
+                        class="hidden md:block bg-white text-blue-600 font-semibold px-5 py-2 rounded-full hover:bg-gray-100 transition duration-300">
+                        <i class="fas fa-user mr-2"></i>Minha Conta
+                    </button>
+                    <button id="mobile-menu-btn" class="md:hidden text-2xl">
+                        <i class="fas fa-bars"></i>
+                    </button>
+                </div>
+            </div>
+
+            <!-- Mobile Menu -->
+            <div id="mobile-menu" class="md:hidden hidden mt-4 pb-2">
+                <div class="flex flex-col space-y-4">
+                    <a href="#inicio" class="hover:text-yellow-300 transition duration-300">Início</a>
+                    <a href="#como-funciona" class="hover:text-yellow-300 transition duration-300">Como Funciona</a>
+                    <a href="#planos" class="hover:text-yellow-300 transition duration-300">Planos</a>
+                    <a href="#operadoras" class="hover:text-yellow-300 transition duration-300">Operadoras</a>
+                    <a href="#contato" class="hover:text-yellow-300 transition duration-300">Contato</a>
+                    <button
+                        class="bg-white text-blue-600 font-semibold px-5 py-2 rounded-full hover:bg-gray-100 transition duration-300 w-max">
+                        <i class="fas fa-user mr-2"></i>Minha Conta
+                    </button>
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section id="inicio" class="gradient-bg text-white py-12 md:py-20 fade-in">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-col md:flex-row items-center justify-between">
+                <div class="md:w-1/2 mb-10 md:mb-0">
+                    <h2 class="text-4xl md:text-5xl font-bold mb-4">Recargas de Celular Pré-Pago Rápidas e Seguras</h2>
+                    <p class="text-xl mb-8 opacity-90">Recarregue seu celular em menos de 2 minutos com a melhor
+                        plataforma de recargas online. Suporte para todas as operadoras.</p>
+
+                    <div class="bg-white rounded-2xl p-6 shadow-soft max-w-lg">
+                        <h3 class="text-2xl font-bold text-gray-800 mb-4">Faça uma recarga agora</h3>
+
+                        <div class="mb-4">
+                            <label class="block text-gray-700 mb-2">Número do telefone</label>
+                            <div class="flex">
+                                <div class="bg-gray-100 rounded-l-lg p-3 border border-r-0">
+                                    <span class="text-gray-700">+55</span>
+                                </div>
+                                <input type="tel" id="phone-number" placeholder="(11) 99999-9999"
+                                    class="phone-input w-full p-3 border rounded-r-lg focus:outline-none text-gray-800">
+                            </div>
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="block text-gray-700 mb-2">Operadora</label>
+                            <div class="relative">
+                                <select id="carrier-select"
+                                    class="w-full p-3 border rounded-lg focus:outline-none focus:border-blue-500 appearance-none bg-white text-gray-800">
+                                    <option value="" disabled selected class="text-gray-500">Selecione sua operadora
+                                    </option>
+                                    <option value="Vivo" class="text-gray-800">Vivo</option>
+                                    <option value="TIM" class="text-gray-800">TIM</option>
+                                    <option value="Claro" class="text-gray-800">Claro</option>
+                                    <option value="Correios" class="text-gray-800">Correios</option>
+                                    <option value="Oi" class="text-gray-800">Oi</option>
+                                </select>
+                                <div
+                                    class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700">
+                                    <i class="fas fa-chevron-down"></i>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="mb-6">
+                            <label class="block text-gray-700 mb-2">Valor da recarga</label>
+                            <div class="grid grid-cols-2 md:grid-cols-4 gap-3">
+                                <button
+                                    class="amount-btn border border-blue-500 text-blue-600 rounded-lg py-3 hover:bg-blue-50 transition duration-300"
+                                    data-value="15">R$ 15</button>
+                                <button
+                                    class="amount-btn border border-blue-500 text-blue-600 rounded-lg py-3 hover:bg-blue-50 transition duration-300"
+                                    data-value="20">R$ 20</button>
+                                <button
+                                    class="amount-btn border border-blue-500 text-blue-600 rounded-lg py-3 hover:bg-blue-50 transition duration-300"
+                                    data-value="35">R$ 35</button>
+                                <button
+                                    class="amount-btn border border-blue-500 text-blue-600 rounded-lg py-3 hover:bg-blue-500 hover:text-white transition duration-300 active"
+                                    data-value="50">R$ 50</button>
+                            </div>
+                            <div class="mt-3">
+                                <input type="text" id="custom-amount" placeholder="Outro valor"
+                                    class="w-full p-3 border rounded-lg focus:outline-none">
+                            </div>
+                        </div>
+
+                        <button id="recharge-btn"
+                            class="w-full gradient-bg text-white font-bold py-4 rounded-lg hover:opacity-90 transition duration-300 flex items-center justify-center">
+                            <i class="fas fa-bolt mr-2"></i> Recarregar Agora
+                        </button>
+
+                        <p class="text-sm text-gray-500 mt-3 text-center">Ao prosseguir, você concorda com nossos Termos
+                            de Serviço</p>
+                    </div>
+                </div>
+
+                <div class="md:w-2/5 flex justify-center">
+                    <div class="relative">
+                        <img src="./assets/hero-img.png" alt="Recarga de celular" class="w-200 md:w-200">
+                        <div class="absolute -bottom-4 -right-4 bg-yellow-400 text-gray-800 p-4 rounded-2xl shadow-lg">
+                            <div class="text-2xl font-bold">+500 mil</div>
+                            <div class="text-sm">Recargas realizadas</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Operadoras -->
+    <section id="operadoras" class="py-12 bg-white">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center mb-10 gradient-text">Todas as operadoras</h2>
+
+            <div class="grid grid-cols-2 md:grid-cols-5 gap-6">
+                <div
+                    class="bg-gray-50 p-6 rounded-xl shadow-soft flex flex-col items-center justify-center hover:shadow-lg transition duration-300">
+                    <div class="text-red-500 text-4xl mb-2">
+                        <i class="fas fa-signal"></i>
+                    </div>
+                    <h3 class="font-bold text-lg">Vivo</h3>
+                    <p class="text-gray-600 text-sm text-center">Recarga instantânea</p>
+                </div>
+
+                <div
+                    class="bg-gray-50 p-6 rounded-xl shadow-soft flex flex-col items-center justify-center hover:shadow-lg transition duration-300">
+                    <div class="text-orange-500 text-4xl mb-2">
+                        <i class="fas fa-broadcast-tower"></i>
+                    </div>
+                    <h3 class="font-bold text-lg">Claro</h3>
+                    <p class="text-gray-600 text-sm text-center">Recarga em 1 minuto</p>
+                </div>
+
+                <div
+                    class="bg-gray-50 p-6 rounded-xl shadow-soft flex flex-col items-center justify-center hover:shadow-lg transition duration-300">
+                    <div class="text-blue-500 text-4xl mb-2">
+                        <i class="fas fa-wifi"></i>
+                    </div>
+                    <h3 class="font-bold text-lg">TIM</h3>
+                    <p class="text-gray-600 text-sm text-center">Ativação imediata</p>
+                </div>
+
+                <div
+                    class="bg-gray-50 p-6 rounded-xl shadow-soft flex flex-col items-center justify-center hover:shadow-lg transition duration-300">
+                    <div class="text-green-500 text-4xl mb-2">
+                        <i class="fas fa-satellite-dish"></i>
+                    </div>
+                    <h3 class="font-bold text-lg">Oi</h3>
+                    <p class="text-gray-600 text-sm text-center">Confirmada em 2min</p>
+                </div>
+
+                <div
+                    class="bg-gray-50 p-6 rounded-xl shadow-soft flex flex-col items-center justify-center hover:shadow-lg transition duration-300">
+                    <div class="text-purple-500 text-4xl mb-2">
+                        <i class="fas fa-sim-card"></i>
+                    </div>
+                    <h3 class="font-bold text-lg">Outras</h3>
+                    <p class="text-gray-600 text-sm text-center">Operadoras locais</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Como Funciona -->
+    <section id="como-funciona" class="py-12 bg-gray-50">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center mb-12 gradient-text">Como funciona</h2>
+
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <div class="text-center">
+                    <div class="step-icon mb-4">
+                        <span>1</span>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">Insira o número</h3>
+                    <p class="text-gray-600">Digite o número do telefone que deseja recarregar. Verifique se o DDD e
+                        número estão corretos.</p>
+                </div>
+
+                <div class="text-center">
+                    <div class="step-icon mb-4">
+                        <span>2</span>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">Escolha o valor</h3>
+                    <p class="text-gray-600">Selecione um dos valores sugeridos ou insira um valor personalizado para
+                        sua recarga.</p>
+                </div>
+
+                <div class="text-center">
+                    <div class="step-icon mb-4">
+                        <span>3</span>
+                    </div>
+                    <h3 class="text-xl font-bold mb-3">Pague e confirme</h3>
+                    <p class="text-gray-600">Realize o pagamento de forma segura e receba a confirmação da recarga em
+                        até 2 minutos.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Planos -->
+    <!-- Planos com Bônus -->
+    <section id="planos" class="py-12 bg-white">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center mb-4 gradient-text">Planos com Bônus de Internet</h2>
+            <p class="text-gray-600 text-center mb-12 max-w-2xl mx-auto">Escolha o plano ideal para suas necessidades e
+                ganhe bônus de internet extra em todas as recargas!</p>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 max-w-6xl mx-auto">
+                <!-- Plano 1 -->
+                <div
+                    class="bg-white rounded-xl shadow-soft p-6 border border-gray-200 hover:border-blue-400 hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1">
+                    <div class="text-center mb-6">
+                        <div class="text-4xl font-bold gradient-text mb-1">R$ 15</div>
+                        <div class="text-gray-500 text-sm">Valor da recarga</div>
+                    </div>
+
+                    <div class="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl p-5 mb-6 text-center">
+                        <h3 class="text-2xl font-bold text-gray-800 mb-1">+1GB</h3>
+                        <p class="text-gray-700 mb-1">de bônus de internet</p>
+                        <span class="text-gray-500 text-sm">(por 15 dias)</span>
+                    </div>
+
+                    <ul class="space-y-3 mb-8">
+                        <li class="flex items-center text-sm">
+                            <i class="fas fa-check text-green-500 mr-3"></i>
+                            <span>Recarga instantânea</span>
+                        </li>
+                        <li class="flex items-center text-sm">
+                            <i class="fas fa-check text-green-500 mr-3"></i>
+                            <span>Bônus válido por 15 dias</span>
+                        </li>
+                        <li class="flex items-center text-sm">
+                            <i class="fas fa-check text-green-500 mr-3"></i>
+                            <span>Todas as operadoras</span>
+                        </li>
+                        <li class="flex items-center text-sm">
+                            <i class="fas fa-check text-green-500 mr-3"></i>
+                            <span>Sem necessidade de pacote</span>
+                        </li>
+                    </ul>
+
+                    <button
+                        class="plan-btn w-full bg-gradient-to-r from-blue-500 to-indigo-600 text-white font-semibold py-3 rounded-lg hover:opacity-90 transition duration-300"
+                        data-value="15">
+                        <i class="fas fa-bolt mr-2"></i> Recarregar Agora
+                    </button>
+                </div>
+
+                <!-- Plano 2 -->
+                <div
+                    class="bg-white rounded-xl shadow-soft p-6 border border-gray-200 hover:border-blue-400 hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1">
+                    <div class="text-center mb-6">
+                        <div class="text-4xl font-bold gradient-text mb-1">R$ 20</div>
+                        <div class="text-gray-500 text-sm">Valor da recarga</div>
+                    </div>
+
+                    <div class="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl p-5 mb-6 text-center">
+                        <h3 class="text-2xl font-bold text-gray-800 mb-1">+2GB</h3>
+                        <p class="text-gray-700 mb-1">de bônus de internet</p>
+                        <span class="text-gray-500 text-sm">(por 30 dias)</span>
+                    </div>
+
+                    <ul class="space-y-3 mb-8">
+                        <li class="flex items-center text-sm">
+                            <i class="fas fa-check text-green-500 mr-3"></i>
+                            <span>Recarga instantânea</span>
+                        </li>
+                        <li class="flex items-center text-sm">
+                            <i class="fas fa-check text-green-500 mr-3"></i>
+                            <span>Bônus válido por 30 dias</span>
+                        </li>
+                        <li class="flex items-center text-sm">
+                            <i class="fas fa-check text-green-500 mr-3"></i>
+                            <span>Todas as operadoras</span>
+                        </li>
+                        <li class="flex items-center text-sm">
+                            <i class="fas fa-check text-green-500 mr-3"></i>
+                            <span>Melhor custo-benefício</span>
+                        </li>
+                    </ul>
+
+                    <button
+                        class="plan-btn w-full bg-gradient-to-r from-blue-500 to-indigo-600 text-white font-semibold py-3 rounded-lg hover:opacity-90 transition duration-300"
+                        data-value="20">
+                        <i class="fas fa-bolt mr-2"></i> Recarregar Agora
+                    </button>
+                </div>
+
+                <!-- Plano 3 (Mais Popular) -->
+                <div
+                    class="bg-white rounded-xl shadow-lg p-6 border-2 border-blue-500 relative transform md:-translate-y-2">
+                    <div
+                        class="absolute top-0 right-0 bg-blue-500 text-white px-4 py-1 rounded-bl-lg rounded-tr-xl text-sm font-bold">
+                        Mais Popular
+                    </div>
+
+                    <div class="text-center mb-6">
+                        <div class="text-4xl font-bold gradient-text mb-1">R$ 35</div>
+                        <div class="text-gray-500 text-sm">Valor da recarga</div>
+                    </div>
+
+                    <div class="bg-gradient-to-r from-blue-100 to-indigo-100 rounded-xl p-5 mb-6 text-center">
+                        <h3 class="text-2xl font-bold text-gray-800 mb-1">+4GB</h3>
+                        <p class="text-gray-700 mb-1">de bônus de internet</p>
+                        <span class="text-gray-500 text-sm">(por 60 dias)</span>
+                    </div>
+
+                    <ul class="space-y-3 mb-8">
+                        <li class="flex items-center text-sm">
+                            <i class="fas fa-check text-green-500 mr-3"></i>
+                            <span>Recarga instantânea</span>
+                        </li>
+                        <li class="flex items-center text-sm">
+                            <i class="fas fa-check text-green-500 mr-3"></i>
+                            <span>Bônus válido por 60 dias</span>
+                        </li>
+                        <li class="flex items-center text-sm">
+                            <i class="fas fa-check text-green-500 mr-3"></i>
+                            <span>Todas as operadoras</span>
+                        </li>
+                        <li class="flex items-center text-sm">
+                            <i class="fas fa-check text-green-500 mr-3"></i>
+                            <span>+ ligações ilimitadas*</span>
+                        </li>
+                    </ul>
+
+                    <button
+                        class="plan-btn w-full gradient-bg text-white font-semibold py-3 rounded-lg hover:opacity-90 transition duration-300"
+                        data-value="35">
+                        <i class="fas fa-crown mr-2"></i> Recarregar Agora
+                    </button>
+                </div>
+
+                <!-- Plano 4 -->
+                <div
+                    class="bg-white rounded-xl shadow-soft p-6 border border-gray-200 hover:border-blue-400 hover:shadow-lg transition-all duration-300 transform hover:-translate-y-1">
+                    <div class="text-center mb-6">
+                        <div class="text-4xl font-bold gradient-text mb-1">R$ 50</div>
+                        <div class="text-gray-500 text-sm">Valor da recarga</div>
+                    </div>
+
+                    <div class="bg-gradient-to-r from-blue-50 to-indigo-50 rounded-xl p-5 mb-6 text-center">
+                        <h3 class="text-2xl font-bold text-gray-800 mb-1">+8GB</h3>
+                        <p class="text-gray-700 mb-1">de bônus de internet</p>
+                        <span class="text-gray-500 text-sm">(por 90 dias)</span>
+                    </div>
+
+                    <ul class="space-y-3 mb-8">
+                        <li class="flex items-center text-sm">
+                            <i class="fas fa-check text-green-500 mr-3"></i>
+                            <span>Recarga instantânea</span>
+                        </li>
+                        <li class="flex items-center text-sm">
+                            <i class="fas fa-check text-green-500 mr-3"></i>
+                            <span>Bônus válido por 90 dias</span>
+                        </li>
+                        <li class="flex items-center text-sm">
+                            <i class="fas fa-check text-green-500 mr-3"></i>
+                            <span>Todas as operadoras</span>
+                        </li>
+                        <li class="flex items-center text-sm">
+                            <i class="fas fa-check text-green-500 mr-3"></i>
+                            <span>Internet para trabalhar e estudar</span>
+                        </li>
+                    </ul>
+
+                    <button
+                        class="plan-btn w-full bg-gradient-to-r from-blue-500 to-indigo-600 text-white font-semibold py-3 rounded-lg hover:opacity-90 transition duration-300"
+                        data-value="50">
+                        <i class="fas fa-bolt mr-2"></i> Recarregar Agora
+                    </button>
+                </div>
+            </div>
+
+            <div class="mt-10 text-center text-gray-500 text-sm max-w-3xl mx-auto">
+                <p>*Ligações ilimitadas para mesma operadora, válido por 30 dias. Os bônus de internet são adicionados
+                    automaticamente após a recarga e têm validade conforme indicado. Consulte condições específicas por
+                    operadora.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer id="contato" class="bg-gray-900 text-white py-12">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+                <div>
+                    <div class="flex items-center space-x-2 mb-4">
+                        <i class="fas fa-mobile-alt text-2xl text-blue-400"></i>
+                        <h2 class="text-2xl font-bold">Recarga<span class="text-yellow-300">Fácil</span></h2>
+                    </div>
+                    <p class="text-gray-400">A maneira mais rápida e segura de recarregar seu celular pré-pago. Suporte
+                        para todas as operadoras.</p>
+                </div>
+
+                <div>
+                    <h3 class="text-xl font-bold mb-4">Links Rápidos</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#inicio" class="text-gray-400 hover:text-white transition duration-300">Início</a>
+                        </li>
+                        <li><a href="#como-funciona" class="text-gray-400 hover:text-white transition duration-300">Como
+                                Funciona</a></li>
+                        <li><a href="#planos" class="text-gray-400 hover:text-white transition duration-300">Planos</a>
+                        </li>
+                        <li><a href="#operadoras"
+                                class="text-gray-400 hover:text-white transition duration-300">Operadoras</a></li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h3 class="text-xl font-bold mb-4">Suporte</h3>
+                    <ul class="space-y-2">
+                        <li><a href="#" class="text-gray-400 hover:text-white transition duration-300">Central de
+                                Ajuda</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition duration-300">FAQ</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition duration-300">Contato</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white transition duration-300">Termos de Uso</a>
+                        </li>
+                    </ul>
+                </div>
+
+                <div>
+                    <h3 class="text-xl font-bold mb-4">Contato</h3>
+                    <ul class="space-y-3">
+                        <li class="flex items-center">
+                            <i class="fas fa-envelope mr-3 text-blue-400"></i>
+                            <span class="text-gray-400">contato@recargafacil.com</span>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-phone mr-3 text-blue-400"></i>
+                            <span class="text-gray-400">(11) 9999-9999</span>
+                        </li>
+                        <li class="flex items-center">
+                            <i class="fas fa-map-marker-alt mr-3 text-blue-400"></i>
+                            <span class="text-gray-400">São Paulo, SP</span>
+                        </li>
+                    </ul>
+
+                    <div class="flex space-x-4 mt-6">
+                        <a href="#" class="bg-gray-800 p-2 rounded-full hover:bg-blue-600 transition duration-300">
+                            <i class="fab fa-facebook-f"></i>
+                        </a>
+                        <a href="#" class="bg-gray-800 p-2 rounded-full hover:bg-blue-400 transition duration-300">
+                            <i class="fab fa-twitter"></i>
+                        </a>
+                        <a href="#" class="bg-gray-800 p-2 rounded-full hover:bg-pink-600 transition duration-300">
+                            <i class="fab fa-instagram"></i>
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <div class="border-t border-gray-800 mt-8 pt-8 text-center text-gray-500">
+                <p>&copy; 2023 RecargaFácil. Todos os direitos reservados.</p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Modal de Confirmação -->
+    <div id="confirmation-modal"
+        class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center hidden">
+        <div class="bg-white rounded-2xl p-8 max-w-md w-11/12 mx-4">
+            <div class="text-center mb-6">
+                <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+                    <i class="fas fa-check text-green-600 text-2xl"></i>
+                </div>
+                <h3 class="text-2xl font-bold text-gray-800 mb-2">Recarga Confirmada!</h3>
+                <p class="text-gray-600">Sua recarga foi processada com sucesso.</p>
+            </div>
+
+            <div class="bg-gray-50 rounded-xl p-4 mb-6">
+                <div class="flex justify-between mb-2">
+                    <span class="text-gray-600">Número:</span>
+                    <span class="font-bold" id="confirmed-number"></span>
+                </div>
+                <div class="flex justify-between mb-2">
+                    <span class="text-gray-600">Valor:</span>
+                    <span class="font-bold" id="confirmed-amount"></span>
+                </div>
+                <div class="flex justify-between">
+                    <span class="text-gray-600">Operadora:</span>
+                    <span class="font-bold" id="confirmed-carrier"></span>
+                </div>
+            </div>
+
+            <div class="text-center text-gray-500 text-sm mb-6">
+                <p>A recarga será ativada em até 2 minutos. Você receberá uma confirmação por SMS.</p>
+            </div>
+
+            <button id="close-modal"
+                class="w-full gradient-bg text-white font-semibold py-3 rounded-lg hover:opacity-90 transition duration-300">
+                Fechar
+            </button>
+        </div>
+    </div>
+
+    <!-- Modal de Recarga -->
+    <!-- Modal de Recarga -->
+    <div id="recharge-modal" class="fixed inset-0 bg-black bg-opacity-50 z-50 flex items-center justify-center hidden">
+        <div class="bg-white rounded-2xl p-6 max-w-md w-11/12 mx-4 modal-container">
+            <!-- Modal Header -->
+            <div class="flex justify-between items-center mb-6">
+                <div>
+                    <h2 class="text-2xl font-bold text-gray-800">Dados de Recarga</h2>
+                    <p class="text-gray-600">Finalize sua recarga</p>
+                </div>
+                <button id="close-modal-btn" class="text-gray-500 hover:text-gray-700 text-xl">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+
+            <!-- Modal Body (Formulário) -->
+            <div class="modal-body" id="modal-form-body">
+                <div class="modal-form-container">
+                    <form class="modal-form" id="paymentForm">
+                        <div class="mb-4">
+                            <label class="block text-gray-700 mb-2">Número do telefone</label>
+                            <input type="tel" id="modal-phone-number" placeholder="(11) 99999-9999"
+                                class="w-full p-3 border rounded-lg focus:outline-none focus:border-blue-500 phone-input-modal"
+                                required>
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="block text-gray-700 mb-2">Plano de Recarga</label>
+                            <select id="rechargeOption"
+                                class="w-full p-3 border rounded-lg focus:outline-none focus:border-blue-500 appearance-none bg-white text-gray-800"
+                                required>
+                                <option value="">--Escolha sua recarga--</option>
+                                <option value="15">R$15 + 1GB por 15 dias</option>
+                                <option value="20">R$20 + 2GB por 30 dias</option>
+                                <option value="35">R$35 + 4GB por 60 dias</option>
+                                <option value="50">R$50 + 8GB por 90 dias</option>
+                            </select>
+                        </div>
+
+                        <div class="mb-4">
+                            <label class="block text-gray-700 mb-2">Operadora</label>
+                            <select id="modal-operator"
+                                class="w-full p-3 border rounded-lg focus:outline-none focus:border-blue-500 appearance-none bg-white text-gray-800"
+                                required>
+                                <option value="">--Selecione a Operadora--</option>
+                                <option value="Vivo">VIVO</option>
+                                <option value="Claro">CLARO</option>
+                                <option value="TIM">TIM</option>
+                                <option value="Oi">OI</option>
+                                <option value="Correios">Correios</option>
+                            </select>
+                        </div>
+
+                        <div class="mb-6">
+                            <label class="block text-gray-700 mb-2">E-mail para confirmação</label>
+                            <input type="email" id="modal-email" placeholder="seu@email.com"
+                                class="w-full p-3 border rounded-lg focus:outline-none focus:border-blue-500" required>
+                        </div>
+
+                        <div class="action-btns flex space-x-3">
+                            <button type="submit" id="submit-recharge"
+                                class="flex-1 gradient-bg text-white font-semibold py-3 rounded-lg hover:opacity-90 transition duration-300">
+                                Gerar PIX
+                            </button>
+                            <button type="button" id="btn-exit"
+                                class="flex-1 border border-gray-300 text-gray-700 font-semibold py-3 rounded-lg hover:bg-gray-50 transition duration-300">
+                                Cancelar
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Modal de Loading (inicialmente escondido) -->
+            <div class="loading-modal hidden" id="loadingModal">
+                <div class="loading-modal-container flex flex-col items-center justify-center py-10">
+                    <div class="spinner mb-4"></div>
+                    <p class="text-xl font-semibold text-gray-800 mb-2">Gerando PIX...</p>
+                    <p class="loading-text text-gray-600 text-center">Aguarde enquanto processamos sua solicitação</p>
+                    <div class="mt-6 w-full max-w-xs">
+                        <div class="bg-gray-200 rounded-full h-2">
+                            <div class="bg-blue-500 h-2 rounded-full progress-bar" style="width: 0%"></div>
+                        </div>
+                    </div>
+                    <p class="text-sm text-gray-500 mt-4">Isso pode levar alguns segundos</p>
+                </div>
+            </div>
+
+            <!-- Modal de QR Code PIX (inicialmente escondido) -->
+            <div class="pix-modal hidden fixed inset-0 z-50 flex items-center justify-center p-4 bg-black bg-opacity-50"
+                id="pixModal">
+                <div class="bg-white rounded-3xl w-full max-w-sm overflow-hidden shadow-xl">
+                    <div class="p-5">
+                        <!-- Header com indicador de progresso -->
+                        <div class="flex items-center gap-1 mb-3">
+                            <div class="w-2 h-2 rounded-full bg-gray-300"></div>
+                            <div class="w-2 h-2 rounded-full bg-gray-300"></div>
+                            <div class="w-2 h-2 rounded-full bg-green-500"></div>
+                        </div>
+
+                        <h3 class="text-xl font-bold text-gray-800 mb-1">Quase lá! Falta só pagar</h3>
+                        <p class="text-sm text-gray-500 mb-4">Escaneie o QR Code ou copie e cole o código PIX</p>
+
+                        <!-- Timer - Mantendo a estrutura mas simplificando -->
+                        <div class="bg-orange-50 rounded-xl px-4 py-3 flex items-center justify-between mb-4">
+                            <span class="text-sm text-gray-700">Tempo restante para pagamento</span>
+                            <span class="text-lg font-bold text-orange-500" id="pix-timer">4:55</span>
+                        </div>
+
+                        <!-- QR Code Container - Mantendo ID original -->
+                        <div class="flex justify-center mb-4">
+                            <div class="bg-white p-3 rounded-2xl border border-gray-100">
+                                <div id="qrcode-container" class="w-48 h-48 flex items-center justify-center">
+                                    <!-- O JS vai preencher aqui com a img -->
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Valor - Mantendo ID original -->
+                        <div class="mb-4">
+                            <p class="text-sm text-gray-500 mb-1">Valor:</p>
+                            <p class="text-2xl font-bold text-gray-800" id="pix-amount">R$ 30,00</p>
+                        </div>
+
+                        <!-- Código PIX - Mantendo ID original -->
+                        <div class="mb-4">
+                            <p class="text-sm text-gray-500 mb-2">Copia e cola:</p>
+                            <div class="bg-gray-50 rounded-xl p-3 border border-gray-100">
+                                <div class="flex items-center gap-2">
+                                    <input type="text" id="pix-code" readonly
+                                        class="w-full bg-transparent text-xs font-mono text-gray-600 outline-none truncate"
+                                        value="00020101021226940014br.gov.bcb.pix2572qrcode.somossimpay.com.br/v2/qr/cob/21c16154-9ff1-4096-995c-632c76c3b665520400053039865802BR5921MARKESTE AÇÕE FAZ O TRABALHADOR">
+                                    <button id="copy-pix-btn"
+                                        class="bg-green-500 text-white px-4 py-2 rounded-lg text-sm font-medium whitespace-nowrap hover:bg-green-600 transition-colors">
+                                        Copiar código PIX
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Botões de ação - Mantendo IDs originais -->
+                        <div class="flex gap-2 mt-2">
+                            <button id="confirm-payment"
+                                class="flex-1 bg-green-500 text-white font-medium py-3 px-4 rounded-lg text-sm hover:bg-green-600 transition-colors">
+                                <i class="fas fa-check mr-1"></i> Já Paguei
+                            </button>
+                            <button id="close-pix-modal"
+                                class="flex-1 bg-gray-100 text-gray-700 font-medium py-3 px-4 rounded-lg text-sm hover:bg-gray-200 transition-colors">
+                                Fechar
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="./js/script.js"> </script>
+</body>
+
+</html>
