@@ -11,6 +11,17 @@
         rel="stylesheet">
     <link rel="stylesheet" href="./css/style.css">
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/toastify-js/src/toastify.min.css">
+
+    <!-- Google tag (gtag.js) -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=AW-669398062">
+    </script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag() { dataLayer.push(arguments); }
+        gtag('js', new Date());
+
+        gtag('config', 'AW-669398062');
+    </script>
 </head>
 
 <body class="bg-gray-50">
@@ -672,9 +683,11 @@
                             </div>
                         </div>
                     </div>
-
+                    <div class=" m-4 text-center">
+                        <h2 class=" text-2xl text-orange-500" id="status"></h2>
+                    </div>
                     <!-- Botões de ação -->
-                    <div class="flex gap-2 mt-2">
+                    <!-- <div class="flex gap-2 mt-2">
                         <button id="confirm-payment"
                             class="flex-1 bg-green-500 text-white font-medium py-3 px-4 rounded-lg text-sm hover:bg-green-600 transition-colors">
                             <i class="fas fa-check mr-1"></i> Já Paguei
@@ -683,7 +696,7 @@
                             class="flex-1 bg-gray-100 text-gray-700 font-medium py-3 px-4 rounded-lg text-sm hover:bg-gray-200 transition-colors">
                             Voltar
                         </button>
-                    </div>
+                    </div> -->
                 </div>
             </div>
         </div>
