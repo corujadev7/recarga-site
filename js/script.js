@@ -7,17 +7,21 @@ const rechargeOptionSelect = document.getElementById('rechargeOption');
 const modalOperatorSelect = document.getElementById('modal-operator');
 const modalEmail = document.getElementById('modal-email');
 const paymentForm = document.getElementById('paymentForm');
+const phoneNumber = document.getElementById('phone-number')
 
 // Elementos dos sub-modais
 const modalFormBody = document.getElementById('modal-form-body');
 const loadingModal = document.getElementById('loadingModal');
-const pixModal = document.getElementById('pixModal');
+// const pixContent = document.getElementById('pixContent');
+const pixContent = document.getElementById('pixContent'); // Mudamos de pixContent para pixContent
+const closePixContentBtn = document.getElementById('close-pix-content');
 const submitRechargeBtn = document.getElementById('submit-recharge');
 const pixAmount = document.getElementById('pix-amount');
 const pixCode = document.getElementById('pix-code');
 const copyPixBtn = document.getElementById('copy-pix-btn');
 const confirmPaymentBtn = document.getElementById('confirm-payment');
-const closePixModalBtn = document.getElementById('close-pix-modal');
+// const closepixContentBtn = document.getElementById('close-pix-modal');
+const modalHeader = document.getElementById('modal-header')
 
 // Funções auxiliares
 function formatPhoneNumber(value) {
@@ -39,7 +43,7 @@ function formatPhoneNumber(value) {
 function openRechargeModal(planValue) {
     // Resetar estados dos sub-modais
     loadingModal.classList.add('hidden');
-    pixModal.classList.add('hidden');
+    pixContent.classList.add('hidden');
     modalFormBody.classList.remove('inactive');
 
     // Resetar botão de submit
@@ -105,26 +109,67 @@ function hideLoading() {
 }
 
 // Funções do modal PIX
-function showPixModal(amount, pixData) {
+// function showpixContent(amount, pixData) {
+//         // Esconder o loading
+//     loadingModal.classList.add('hidden');
+
+//     // Esconder o formulário (já deve estar escondido pelo loading, mas garantimos)
+//     modalFormBody.classList.add('hidden');
+//     modalHeader.classList.add('hidden');
+
+//     // Mostrar o PIX no mesmo modal
+//     pixContent.classList.remove('hidden');
+//     localStorage.setItem('pixData', JSON.stringify(pixData))
+
+//     // Atualizar informações
+//     pixAmount.textContent = `R$ ${parseFloat(amount).toFixed(2).replace('.', ',')}`;
+
+//     if (pixData) {
+//         // Atualizar QR Code placeholder
+//         const qrcodeContainer = document.getElementById('qrcode-container');
+//         if (qrcodeContainer && pixData.qrcode) {
+//             // Remove espaços em branco extras e quebras de linha
+//             const pixString = pixData.qrcode.trim();
+
+//             qrcodeContainer.innerHTML = `
+//             <img
+//                 src="https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(pixString)}"
+//                 alt="QR Code PIX"
+//                 class="w-66 h-66"
+//                 onerror="this.onerror=null; console.error('Erro ao carregar QR Code')">
+//         `;
+//         }
+
+//         // Atualizar código PIX
+//         if (pixData.qrcode && pixCode) {
+//             pixCode.value = pixData.qrcode.trim();
+//         }
+//     }
+// }
+// Funções do modal PIX (agora conteúdo, não modal)
+function showPixContent(amount, pixData) {
+    // Esconder loading e formulário
     loadingModal.classList.add('hidden');
-    pixModal.classList.remove('hidden');
+    modalFormBody.classList.add('hidden');
+
+    // Mostrar conteúdo PIX
+    pixContent.classList.remove('hidden');
+
     localStorage.setItem('pixData', JSON.stringify(pixData))
 
     // Atualizar informações
     pixAmount.textContent = `R$ ${parseFloat(amount).toFixed(2).replace('.', ',')}`;
 
     if (pixData) {
-        // Atualizar QR Code placeholder
+        // Atualizar QR Code
         const qrcodeContainer = document.getElementById('qrcode-container');
         if (qrcodeContainer && pixData.qrcode) {
-            // Remove espaços em branco extras e quebras de linha
             const pixString = pixData.qrcode.trim();
-
             qrcodeContainer.innerHTML = `
             <img
                 src="https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(pixString)}"
                 alt="QR Code PIX"
-                class="w-66 h-66"
+                class="w-48 h-48"
                 onerror="this.onerror=null; console.error('Erro ao carregar QR Code')">
         `;
         }
@@ -136,8 +181,94 @@ function showPixModal(amount, pixData) {
     }
 }
 
-function closePixModal() {
-    pixModal.classList.add('hidden');
+function closePixContent() {
+    pixContent.classList.add('hidden');
+    modalFormBody.classList.remove('hidden'); // Mostrar formulário novamente
+}
+
+// No evento de submit do formulário
+if (paymentForm) {
+    paymentForm.addEventListener('submit', async function (e) {
+        e.preventDefault();
+
+        // Validação...
+
+        // 1. Esconder formulário e mostrar loading
+        modalFormBody.classList.add('hidden');
+        loadingModal.classList.remove('hidden');
+
+        const formData = {
+            phone: modalPhoneNumber.value,
+            amount: rechargeOptionSelect.value,
+            operator: modalOperatorSelect.value,
+            email: modalEmail.value,
+            plan: rechargeOptionSelect.options[rechargeOptionSelect.selectedIndex].text
+        };
+
+        try {
+            // 2. Chamar API
+            const pixResponse = await generatePix(
+                formData.amount, formData.email, formData.phone
+            );
+
+            // console.log("PIX RESPONSE==>>", pixResponse)
+
+            if (pixResponse.success) {
+                // 3. Esconder loading e mostrar conteúdo PIX
+                showPixContent(formData.amount, pixResponse);
+
+                // Salvar transação
+                localStorage.setItem('lastTransaction', JSON.stringify({
+                    ...formData,
+                    transactionId: pixResponse.transactionId,
+                    timestamp: new Date().toISOString()
+                }));
+            } else {
+                throw new Error('Falha ao gerar PIX');
+            }
+        } catch (error) {
+            // Em caso de erro: esconder loading e mostrar formulário
+            loadingModal.classList.add('hidden');
+            modalFormBody.classList.remove('hidden');
+
+            alert(`Erro ao processar a recarga: ${error.message}\n\nPor favor, tente novamente.`);
+            console.error('Erro na geração do PIX:', error);
+        }
+    });
+}
+
+// Botão Voltar do PIX
+if (closePixContentBtn) {
+    closePixContentBtn.addEventListener('click', closePixContent);
+}
+
+// Botão "Já Paguei"
+if (confirmPaymentBtn) {
+    confirmPaymentBtn.addEventListener('click', function () {
+        const transactionData = JSON.parse(localStorage.getItem('lastTransaction') || '{}');
+
+        // Mostrar loading
+        modalFormBody.classList.add('hidden');
+        pixContent.classList.add('hidden');
+        loadingModal.classList.remove('hidden');
+
+        setTimeout(() => {
+            // Esconder loading e fechar tudo
+            loadingModal.classList.add('hidden');
+            rechargeModal.classList.add('hidden');
+            document.body.style.overflow = 'auto';
+
+            // Reset para próxima vez
+            modalFormBody.classList.remove('hidden');
+            paymentForm.reset();
+
+            
+        }, 2000);
+    });
+}
+
+function closepixContent() {
+    pixContent.classList.add('hidden');
     modalFormBody.classList.remove('inactive');
 }
 
@@ -168,6 +299,12 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
+    if (phoneNumber) {
+        phoneNumber.addEventListener('input', function (e) {
+            this.value = formatPhoneNumber(this.value)
+        })
+    }
+
     // Fechar modais
     if (closeModalBtn) {
         closeModalBtn.addEventListener('click', closeRechargeModal);
@@ -177,8 +314,8 @@ document.addEventListener('DOMContentLoaded', function () {
         btnExit.addEventListener('click', closeRechargeModal);
     }
 
-    if (closePixModalBtn) {
-        closePixModalBtn.addEventListener('click', closePixModal);
+    if (closePixContentBtn) {
+        closePixContentBtn.addEventListener('click', closepixContent);
     }
 
     // Fechar modal ao clicar fora
@@ -235,7 +372,7 @@ document.addEventListener('DOMContentLoaded', function () {
     const mainRechargeBtn = document.getElementById('recharge-btn');
     if (mainRechargeBtn) {
         mainRechargeBtn.addEventListener('click', function () {
-            const phoneNumber = document.getElementById('phone-number')?.value?.trim();
+            const phoneNumber = document.getElementById('modal-phone-number')?.value?.trim();
             const carrierSelect = document.getElementById('carrier-select');
             const selectedCarrier = carrierSelect?.value;
             const customAmountInput = document.getElementById('custom-amount');
@@ -325,7 +462,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
                 if (pixResponse.success) {
                     // Mostrar PIX
-                    showPixModal(formData.amount, pixResponse);
+                    showPixContent(formData.amount, pixResponse);
 
                     // Salvar transação
                     localStorage.setItem('lastTransaction', JSON.stringify({
@@ -373,15 +510,30 @@ document.addEventListener('DOMContentLoaded', function () {
             const transactionData = JSON.parse(localStorage.getItem('lastTransaction') || '{}');
 
             // Simular verificação
-            showLoading();
+            // showLoading();
 
             setTimeout(() => {
-                closePixModal();
+                closepixContent();
                 hideLoading();
                 closeRechargeModal();
 
                 // Feedback
-                alert(`✅ Pagamento confirmado!\n\nSua recarga de R$ ${transactionData.amount} para o número ${transactionData.phone} foi processada com sucesso.\n\nO crédito será adicionado em até 2 minutos. Um e-mail de confirmação foi enviado para ${transactionData.email}`);
+                Toastify({
+                    text: `✅ Pagamento confirmado! Sua recarga de R$ ${transactionData.amount} para ${transactionData.phone} foi processada.`,
+                    duration: 5000,
+                    close: true,
+                    gravity: "top", // top or bottom
+                    position: "right", // left, center or right
+                    stopOnFocus: true,
+                    style: {
+                        background: "linear-gradient(to right, #00b09b, #96c93d)",
+                        borderRadius: "8px",
+                        fontSize: "14px",
+                        fontWeight: "500",
+                        boxShadow: "0 4px 12px rgba(0,0,0,0.15)"
+                    },
+                    onClick: function () { } // Callback after click
+                }).showToast();
 
                 // Sincronizar com formulário principal
                 const mainPhoneInput = document.getElementById('phone-number');

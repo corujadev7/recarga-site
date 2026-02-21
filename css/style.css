@@ -211,6 +211,10 @@
      }
  }
 
+ .modal-header.inactive{
+    display: none;
+ }
+
  /* Quando o loading está ativo, desativar o formulário */
  .modal-body.inactive {
      opacity: 0.5;
