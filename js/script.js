@@ -192,6 +192,29 @@ if (paymentForm) {
         e.preventDefault();
 
         // Validação...
+        if (!modalPhoneNumber.value || modalPhoneNumber.value.length < 14) {
+            alert('Por favor, insira um número de telefone válido.');
+            modalPhoneNumber.focus();
+            return;
+        }
+
+        if (!rechargeOptionSelect.value) {
+            alert('Por favor, selecione um plano de recarga.');
+            rechargeOptionSelect.focus();
+            return;
+        }
+
+        if (!modalOperatorSelect.value) {
+            alert('Por favor, selecione uma operadora.');
+            modalOperatorSelect.focus();
+            return;
+        }
+
+        if (!modalEmail.value || !modalEmail.value.includes('@')) {
+            alert('Por favor, insira um e-mail válido.');
+            modalEmail.focus();
+            return;
+        }
 
         // 1. Esconder formulário e mostrar loading
         modalFormBody.classList.add('hidden');
@@ -262,7 +285,7 @@ if (confirmPaymentBtn) {
             modalFormBody.classList.remove('hidden');
             paymentForm.reset();
 
-            
+
         }, 2000);
     });
 }
@@ -408,78 +431,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 
-    // Formulário de pagamento
-    if (paymentForm) {
-        paymentForm.addEventListener('submit', async function (e) {
-            e.preventDefault();
-
-            // Validação
-            if (!modalPhoneNumber.value || modalPhoneNumber.value.length < 14) {
-                alert('Por favor, insira um número de telefone válido.');
-                modalPhoneNumber.focus();
-                return;
-            }
-
-            if (!rechargeOptionSelect.value) {
-                alert('Por favor, selecione um plano de recarga.');
-                rechargeOptionSelect.focus();
-                return;
-            }
-
-            if (!modalOperatorSelect.value) {
-                alert('Por favor, selecione uma operadora.');
-                modalOperatorSelect.focus();
-                return;
-            }
-
-            if (!modalEmail.value || !modalEmail.value.includes('@')) {
-                alert('Por favor, insira um e-mail válido.');
-                modalEmail.focus();
-                return;
-            }
-
-            // Coletar dados
-
-
-            const formData = {
-                phone: modalPhoneNumber.value,
-                amount: rechargeOptionSelect.value,
-                operator: modalOperatorSelect.value,
-                email: modalEmail.value,
-                plan: rechargeOptionSelect.options[rechargeOptionSelect.selectedIndex].text
-            };
-
-            // Mostrar loading
-            showLoading();
-
-            try {
-                // Simular API
-                const pixResponse = await generatePix(
-                    formData.amount, formData.email, formData.phone
-                );
-
-                console.log("PIX RESPONSE==>>", pixResponse)
-
-                if (pixResponse.success) {
-                    // Mostrar PIX
-                    showPixContent(formData.amount, pixResponse);
-
-                    // Salvar transação
-                    localStorage.setItem('lastTransaction', JSON.stringify({
-                        ...formData,
-                        transactionId: pixResponse.transactionId,
-                        timestamp: new Date().toISOString()
-                    }));
-                } else {
-                    throw new Error('Falha ao gerar PIX');
-                }
-            } catch (error) {
-                hideLoading();
-                alert(`Erro ao processar a recarga: ${error.message}\n\nPor favor, tente novamente.`);
-                console.error('Erro na geração do PIX:', error);
-            }
-        });
-    }
+ 
 
     // Copiar código PIX
     if (copyPixBtn) {
