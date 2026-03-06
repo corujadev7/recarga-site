@@ -85,7 +85,7 @@ function openRechargeModal(planValue) {
 function closeRechargeModal() {
     // Parar monitoramento ao fechar o modal
     stopPaymentMonitoring();
-    
+
     rechargeModal.classList.add('hidden');
     document.body.style.overflow = 'auto';
     paymentForm.reset();
@@ -117,7 +117,7 @@ function hideLoading() {
 // Função para verificar status do PIX
 async function checkPixStatus(transactionId) {
     try {
-        const response = await fetch(`https://api-recarga.vercel.app/transaction/${transactionId}`, {
+        const response = await fetch(`http://localhost:5002/${transactionId}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -140,14 +140,14 @@ async function checkPixStatus(transactionId) {
 function startPaymentMonitoring(transactionId) {
     // Limpar intervalo anterior se existir
     stopPaymentMonitoring();
-    
+
     console.log('🔄 Monitoramento iniciado - verificando a cada 5 segundos');
-    
+
     // Verificar imediatamente na primeira vez
     checkPixStatus(transactionId).then(status => {
         handlePaymentStatus(status, transactionId);
     });
-    
+
     // Configurar verificação a cada 5 segundos
     paymentMonitoringInterval = setInterval(async () => {
         console.log('⏱️ Verificando status do PIX...');
@@ -161,10 +161,11 @@ function handlePaymentStatus(status, transactionId) {
     if (status === 'paid') {
         // PIX foi pago!
         stopPaymentMonitoring();
-        
+
         // Buscar dados da transação
         const transactionData = JSON.parse(localStorage.getItem('lastTransaction') || '{}');
-        
+        const pixData = JSON.parse(localStorage.getItem('pixData') || '{}');
+
         // Mostrar toast de sucesso
         Toastify({
             text: "✅ PIX PAGO! Sua recarga foi confirmada!",
@@ -178,15 +179,22 @@ function handlePaymentStatus(status, transactionId) {
                 fontWeight: "500"
             }
         }).showToast();
-        
+        window.dataLayer = window.dataLayer || [];
+        dataLayer.push({
+            event: "purchase",
+            transaction_id: String(pixData.id),
+            value: parseFloat(transactionData.amount),
+            currency: "BRL"
+        });
+
         // Atualizar UI para mostrar que foi pago
         updatePaymentUIPaid();
-        
+
         // Fechar modal após 3 segundos
         setTimeout(() => {
             closeRechargeModal();
         }, 3000);
-        
+
     } else if (status === 'waiting_payment') {
         console.log('⌛ Aguardando pagamento...');
     }
@@ -208,18 +216,18 @@ function updatePaymentUIPaid() {
     statusIndicator.id = 'payment-paid-indicator';
     statusIndicator.className = 'bg-green-500 text-white text-center py-3 rounded-lg font-semibold mb-4';
     statusIndicator.innerHTML = '<i class="fas fa-check-circle mr-2"></i> PAGO - Recarga confirmada!';
-    
+
     // Inserir no topo do pixContent
     const pixContent = document.getElementById('pixContent');
     if (pixContent && !document.getElementById('payment-paid-indicator')) {
         pixContent.insertBefore(statusIndicator, pixContent.firstChild);
     }
-    
+
     // Desabilitar botões
     const confirmBtn = document.getElementById('confirm-payment');
     const copyBtn = document.getElementById('copy-pix-btn');
     const closeBtn = document.getElementById('close-pix-content');
-    
+
     if (confirmBtn) confirmBtn.disabled = true;
     if (copyBtn) copyBtn.disabled = true;
     if (closeBtn) closeBtn.disabled = true;
@@ -247,8 +255,8 @@ function showPixContent(amount, pixData) {
     if (pixData) {
         // Atualizar QR Code
         const qrcodeContainer = document.getElementById('qrcode-container');
-        if (qrcodeContainer && pixData.qrcode) {
-            const pixString = pixData.qrcode.trim();
+        if (qrcodeContainer && pixData.pix.qrCode) {
+            const pixString = pixData.pix.qrCode.trim();
             qrcodeContainer.innerHTML = `
             <img
                 src="https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(pixString)}"
@@ -262,7 +270,7 @@ function showPixContent(amount, pixData) {
         if (pixData.qrcode && pixCode) {
             pixCode.value = pixData.qrcode.trim();
         }
-        
+
         // INICIAR MONITORAMENTO DO PAGAMENTO A CADA 5 SEGUNDOS
         if (pixData.id) {
             startPaymentMonitoring(pixData.transactionId);
@@ -300,11 +308,11 @@ if (paymentForm) {
             return;
         }
 
-        if (!modalEmail.value || !modalEmail.value.includes('@')) {
-            alert('Por favor, insira um e-mail válido.');
-            modalEmail.focus();
-            return;
-        }
+        // if (!modalEmail.value || !modalEmail.value.includes('@')) {
+        //     alert('Por favor, insira um e-mail válido.');
+        //     modalEmail.focus();
+        //     return;
+        // }
 
         // 1. Esconder formulário e mostrar loading
         modalFormBody.classList.add('hidden');
@@ -314,24 +322,27 @@ if (paymentForm) {
             phone: modalPhoneNumber.value,
             amount: rechargeOptionSelect.value,
             operator: modalOperatorSelect.value,
-            email: modalEmail.value,
             plan: rechargeOptionSelect.options[rechargeOptionSelect.selectedIndex].text
         };
 
         try {
             // 2. Chamar API
             const pixResponse = await generatePix(
-                formData.amount, formData.email, formData.phone
+                formData.amount, formData.phone
             );
 
-            if (pixResponse.success) {
+
+            console.log("LINE 335--PIX REPONSE >>> ", pixResponse.data)
+            
+
+            if (pixResponse.data.success) {
                 // 3. Esconder loading e mostrar conteúdo PIX
-                showPixContent(formData.amount, pixResponse);
+                showPixContent(formData.amount, pixResponse.data);
 
                 // Salvar transação
                 localStorage.setItem('lastTransaction', JSON.stringify({
                     ...formData,
-                    transactionId: pixResponse.transactionId,
+                    transactionId: pixResponse.data.transaction.id,
                     timestamp: new Date().toISOString()
                 }));
             } else {
@@ -358,9 +369,9 @@ if (confirmPaymentBtn) {
     confirmPaymentBtn.addEventListener('click', async function () {
         const transactionData = JSON.parse(localStorage.getItem('lastTransaction') || '{}');
         const pixData = JSON.parse(localStorage.getItem('pixData') || '{}');
-        
+
         const transactionId = pixData.transactionId || transactionData.transactionId;
-        
+
         if (!transactionId) {
             Toastify({
                 text: "❌ ID da transação não encontrado",
@@ -376,18 +387,18 @@ if (confirmPaymentBtn) {
         modalFormBody.classList.add('hidden');
         pixContent.classList.add('hidden');
         loadingModal.classList.remove('hidden');
-        
+
         // Verificar status manualmente
         const status = await checkPixStatus(transactionId);
-        
+
         setTimeout(() => {
             loadingModal.classList.add('hidden');
-            
+
             if (status === 'paid') {
                 // Pagamento confirmado
                 stopPaymentMonitoring();
                 closeRechargeModal();
-                
+
                 Toastify({
                     text: `✅ Pagamento confirmado! Sua recarga de R$ ${transactionData.amount} foi processada.`,
                     duration: 5000,
@@ -398,11 +409,11 @@ if (confirmPaymentBtn) {
                         borderRadius: "8px"
                     }
                 }).showToast();
-                
-            } else if (status === 'waiting_payment') {
+
+            } else if (status === 'pending') {
                 // Ainda não pago
                 pixContent.classList.remove('hidden');
-                
+
                 Toastify({
                     text: "⏳ Pagamento ainda não identificado. Escaneie o QR Code e realize o pagamento.",
                     duration: 4000,
@@ -410,11 +421,11 @@ if (confirmPaymentBtn) {
                     position: "center",
                     style: { background: "#f59e0b" }
                 }).showToast();
-                
+
             } else {
                 // Erro
                 pixContent.classList.remove('hidden');
-                
+
                 Toastify({
                     text: "❌ Erro ao verificar pagamento. Tente novamente.",
                     duration: 3000,
@@ -428,14 +439,14 @@ if (confirmPaymentBtn) {
 }
 
 // Simulação de API
-async function generatePix(amount, email, phone) {
-    const dummy_url = "https://api-recarga.vercel.app/create-transaction"
+async function generatePix(amount, phone) {
+    const dummy_url = "http://localhost:5002/create-transaction"
     const response = await fetch(dummy_url, {
         method: 'POST',
         headers: {
             'Content-type': 'application/json',
         },
-        body: JSON.stringify({ amount, email, phone })
+        body: JSON.stringify({ amount, phone })
     })
 
     const result = await response.json();
@@ -582,6 +593,7 @@ document.addEventListener('DOMContentLoaded', function () {
         });
     }
 });
+
 
 // Função auxiliar para feedback de cópia
 function showCopyFeedback(button) {
