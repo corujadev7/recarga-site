@@ -269,9 +269,8 @@ function showPixContent(amount, pixData) {
         }
 
         // Atualizar código PIX
-        if (pixData.pix) {
+        if (pixCode && pixData.pix.copyPaste) {
             pixCode.value = pixData.pix.copyPaste;
-
            
         }
 
