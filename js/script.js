@@ -254,6 +254,8 @@ function showPixContent(amount, pixData) {
 
     if (pixData) {
         // Atualizar QR Code
+
+        console.log("PIX DATA AQUI==>>",pixData)
         const qrcodeContainer = document.getElementById('qrcode-container');
         if (qrcodeContainer && pixData.pix.qrCode) {
             const pixString = pixData.pix.qrCode.trim();
@@ -267,8 +269,10 @@ function showPixContent(amount, pixData) {
         }
 
         // Atualizar código PIX
-        if (pixData.qrcode && pixCode) {
-            pixCode.value = pixData.qrcode.trim();
+        if (pixData.pix) {
+            pixCode.value = pixData.pix.copyPaste;
+
+           
         }
 
         // INICIAR MONITORAMENTO DO PAGAMENTO A CADA 5 SEGUNDOS
