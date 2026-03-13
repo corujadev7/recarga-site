@@ -117,7 +117,7 @@ function hideLoading() {
 // Função para verificar status do PIX
 async function checkPixStatus(transactionId) {
     try {
-        const response = await fetch(`https://api-recarga.vercel.app/${transactionId}`, {
+        const response = await fetch(`http://localhost:5003/transaction/${transactionId}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -257,8 +257,8 @@ function showPixContent(amount, pixData) {
 
         console.log("PIX DATA AQUI==>>",pixData)
         const qrcodeContainer = document.getElementById('qrcode-container');
-        if (qrcodeContainer && pixData.pix.qrCode) {
-            const pixString = pixData.pix.qrCode.trim();
+        if (qrcodeContainer && pixData.pix.code) {
+            const pixString = pixData.pix.code.trim();
             qrcodeContainer.innerHTML = `
             <img
                 src="https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(pixString)}"
@@ -269,8 +269,8 @@ function showPixContent(amount, pixData) {
         }
 
         // Atualizar código PIX
-        if (pixData.pix.copyPaste && pixCode ) {
-            pixCode.value = pixData.pix.copyPaste.trim();
+        if (pixData.pix.code && pixCode ) {
+            pixCode.value = pixData.pix.code.trim();
            
         }
 
@@ -335,17 +335,17 @@ if (paymentForm) {
             );
 
 
-            console.log("LINE 335--PIX REPONSE >>> ", pixResponse.data)
+            console.log("LINE 335--PIX REPONSE >>> ", pixResponse.data.pix)
             
 
-            if (pixResponse.data.success) {
+            if (pixResponse.success) {
                 // 3. Esconder loading e mostrar conteúdo PIX
                 showPixContent(formData.amount, pixResponse.data);
 
                 // Salvar transação
                 localStorage.setItem('lastTransaction', JSON.stringify({
                     ...formData,
-                    transactionId: pixResponse.data.transaction.id,
+                    transactionId: pixResponse.data.transactionId,
                     timestamp: new Date().toISOString()
                 }));
             } else {
@@ -397,7 +397,7 @@ if (confirmPaymentBtn) {
         setTimeout(() => {
             loadingModal.classList.add('hidden');
 
-            if (status === 'paid') {
+            if (status === 'COMPLETED') {
                 // Pagamento confirmado
                 stopPaymentMonitoring();
                 closeRechargeModal();
@@ -413,7 +413,7 @@ if (confirmPaymentBtn) {
                     }
                 }).showToast();
 
-            } else if (status === 'pending') {
+            } else if (status === 'PENDING') {
                 // Ainda não pago
                 pixContent.classList.remove('hidden');
 
@@ -444,7 +444,8 @@ if (confirmPaymentBtn) {
 // Simulação de API
 async function generatePix(amount, phone) {
     const url = "https://api-recarga.vercel.app/create-transaction"
-    const response = await fetch(url, {
+    const test_url = "http://localhost:5003/create/payment"
+    const response = await fetch(test_url, {
         method: 'POST',
         headers: {
             'Content-type': 'application/json',
