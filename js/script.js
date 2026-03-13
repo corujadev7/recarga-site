@@ -117,7 +117,7 @@ function hideLoading() {
 // Função para verificar status do PIX
 async function checkPixStatus(transactionId) {
     try {
-        const response = await fetch(`http://localhost:5003/transaction/${transactionId}`, {
+        const response = await fetch(`https://api-sigilo.vercel.app/transaction/${transactionId}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -443,9 +443,8 @@ if (confirmPaymentBtn) {
 
 // Simulação de API
 async function generatePix(amount, phone) {
-    const url = "https://api-recarga.vercel.app/create-transaction"
-    const test_url = "http://localhost:5003/create/payment"
-    const response = await fetch(test_url, {
+    const  url = "https://api-sigilo.vercel.app/create/payment"
+    const response = await fetch(url, {
         method: 'POST',
         headers: {
             'Content-type': 'application/json',
