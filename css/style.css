@@ -2,6 +2,9 @@
      font-family: 'Poppins', sans-serif;
  }
 
+ body{
+    padding: 10px;
+ }
  .plan-btn {
      position: relative;
      overflow: hidden;

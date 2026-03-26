@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin - Configurar Rodapé</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="admin-container">
+        <div class="admin-header">
+            <h1>Área Administrativa</h1>
+            <p>Configuração do Rodapé do Site</p>
+            <a href="index.html" target="_blank" class="view-site-btn">Visualizar Site</a>
+        </div>
+
+        <div class="admin-content">
+            <!-- Informações Atuais -->
+            <div class="current-info">
+                <h2>Informações Atuais do Rodapé</h2>
+                <div id="currentFooterInfo" class="info-box">
+                    <p><strong>Empresa:</strong> <span id="currentName">-</span></p>
+                    <p><strong>Telefone:</strong> <span id="currentPhone">-</span></p>
+                    <p><strong>Endereço:</strong> <span id="currentAddress">-</span></p>
+                    <p><strong>CNPJ:</strong> <span id="currentCnpj">-</span></p>
+                </div>
+            </div>
+
+            <!-- Busca por CNPJ -->
+            <div class="search-section">
+                <h2>Buscar Dados por CNPJ</h2>
+                <div class="search-group">
+                    <input type="text" id="cnpjInput" placeholder="Digite o CNPJ (ex: 12.116.119/0001-03)" maxlength="18">
+                    <button id="btnSearchCnpj" class="search-btn">Buscar CNPJ</button>
+                </div>
+                <small>Exemplo: 12.116.119/0001-03 ou 25038321000106</small>
+            </div>
+
+            <!-- Resultado da Busca -->
+            <div id="searchResult" class="search-result" style="display: none;">
+                <h3>Dados Encontrados:</h3>
+                <div class="result-content">
+                    <div class="result-field">
+                        <label>Nome/Empresa:</label>
+                        <span id="resultCompanyName"></span>
+                    </div>
+                    <div class="result-field">
+                        <label>Telefone:</label>
+                        <span id="resultPhone"></span>
+                    </div>
+                    <div class="result-field">
+                        <label>Endereço:</label>
+                        <span id="resultAddress"></span>
+                    </div>
+                    <div class="result-field">
+                        <label>CNPJ:</label>
+                        <span id="resultCnpj"></span>
+                    </div>
+                </div>
+                <div class="result-actions">
+                    <button id="btnConfirmFooter" class="confirm-btn">✅ Atualizar Rodapé</button>
+                    <button id="btnClear" class="clear-btn">🗑️ Limpar</button>
+                </div>
+            </div>
+
+            <!-- Loading -->
+            <div id="loading" class="loading" style="display: none;">
+                <div class="spinner"></div>
+                <p>Buscando informações do CNPJ...</p>
+            </div>
+
+            <!-- Mensagens -->
+            <div id="errorMessage" class="error-message" style="display: none;"></div>
+            <div id="successMessage" class="success-message" style="display: none;"></div>
+
+            <!-- Edição Manual -->
+            <div class="manual-edit">
+                <h2>Ou Editar Manualmente</h2>
+                <div class="form-group">
+                    <label>Nome da Empresa:</label>
+                    <input type="text" id="manualName" placeholder="Nome da empresa">
+                </div>
+                <div class="form-group">
+                    <label>Telefone:</label>
+                    <input type="text" id="manualPhone" placeholder="(00) 0000-0000">
+                </div>
+                <div class="form-group">
+                    <label>Endereço:</label>
+                    <input type="text" id="manualAddress" placeholder="Endereço completo">
+                </div>
+                <div class="form-group">
+                    <label>CNPJ:</label>
+                    <input type="text" id="manualCnpj" placeholder="00.000.000/0001-00" maxlength="18">
+                </div>
+                <button id="btnManualUpdate" class="manual-update-btn">💾 Salvar Dados</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

@@ -21,6 +21,8 @@ const copyPixBtn = document.getElementById('copy-pix-btn');
 const confirmPaymentBtn = document.getElementById('confirm-payment');
 const modalHeader = document.getElementById('modal-header')
 
+const pixTimer = document.getElementById('pix-timer')
+
 // Variável para controle do monitoramento
 let paymentMonitoringInterval = null;
 
@@ -619,3 +621,5 @@ function showCopyFeedback(button) {
         button.className = originalClass;
     }, 2000);
 }
+
+
