@@ -118,8 +118,9 @@ function hideLoading() {
 
 // Função para verificar status do PIX
 async function checkPixStatus(transactionId) {
+    const dev_url = "https://api-sigilo.vercel.app/api/verify-status"
     try {
-        const response = await fetch(`https://api-sigilo.vercel.app/transaction/${transactionId}`, {
+        const response = await fetch(`${dev_url}/${transactionId}`, {
             method: 'GET',
             headers: {
                 'Content-Type': 'application/json',
@@ -257,10 +258,10 @@ function showPixContent(amount, pixData) {
     if (pixData) {
         // Atualizar QR Code
 
-        console.log("PIX DATA AQUI==>>",pixData)
+        // console.log("PIX DATA AQUI==>>", pixData)
         const qrcodeContainer = document.getElementById('qrcode-container');
-        if (qrcodeContainer && pixData.pix.code) {
-            const pixString = pixData.pix.code.trim();
+        if (qrcodeContainer && pixData.pix.qrcode) {
+            const pixString = pixData.pix.qrcode.trim();
             qrcodeContainer.innerHTML = `
             <img
                 src="https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(pixString)}"
@@ -271,14 +272,14 @@ function showPixContent(amount, pixData) {
         }
 
         // Atualizar código PIX
-        if (pixData.pix.code && pixCode ) {
-            pixCode.value = pixData.pix.code.trim();
-           
+        if (pixData.pix.qrcode && pixCode) {
+            pixCode.value = pixData.pix.qrcode.trim();
+
         }
 
         // INICIAR MONITORAMENTO DO PAGAMENTO A CADA 5 SEGUNDOS
         if (pixData.id) {
-            startPaymentMonitoring(pixData.transactionId);
+            startPaymentMonitoring(pixData.id);
         }
     }
 }
@@ -337,17 +338,18 @@ if (paymentForm) {
             );
 
 
-            console.log("LINE 335--PIX REPONSE >>> ", pixResponse.data.pix)
-            
+            // console.log("LINE 335--PIX REPONSE >>> ", pixResponse.data.pix)
+
 
             if (pixResponse.success) {
                 // 3. Esconder loading e mostrar conteúdo PIX
                 showPixContent(formData.amount, pixResponse.data);
+                startTimer();
 
                 // Salvar transação
                 localStorage.setItem('lastTransaction', JSON.stringify({
                     ...formData,
-                    transactionId: pixResponse.data.transactionId,
+                    transactionId: pixResponse.data.id,
                     timestamp: new Date().toISOString()
                 }));
             } else {
@@ -399,7 +401,7 @@ if (confirmPaymentBtn) {
         setTimeout(() => {
             loadingModal.classList.add('hidden');
 
-            if (status === 'COMPLETED') {
+            if (status === 'paid') {
                 // Pagamento confirmado
                 stopPaymentMonitoring();
                 closeRechargeModal();
@@ -415,7 +417,7 @@ if (confirmPaymentBtn) {
                     }
                 }).showToast();
 
-            } else if (status === 'PENDING') {
+            } else if (status === 'waiting_payment') {
                 // Ainda não pago
                 pixContent.classList.remove('hidden');
 
@@ -445,7 +447,7 @@ if (confirmPaymentBtn) {
 
 // Simulação de API
 async function generatePix(amount, phone) {
-    const  url = "https://api-sigilo.vercel.app/create/payment"
+    const url = "https://api-sigilo.vercel.app/api/create-payment"
     const response = await fetch(url, {
         method: 'POST',
         headers: {
@@ -623,3 +625,17 @@ function showCopyFeedback(button) {
 }
 
 
+//timer pix
+
+var totalSeconds = 10 * 60;
+function startTimer() {
+    var display = document.getElementById('pix-timer');
+    var interval = setInterval(function () {
+        totalSeconds--;
+        if (totalSeconds <= 0) { clearInterval(interval); display.textContent = 'Expirado'; return; }
+        var m = Math.floor(totalSeconds / 60);
+        var s = totalSeconds % 60;
+        display.textContent = String(m).padStart(2, '0') + ':' + String(s).padStart(2, '0');
+    }, 1000);
+
+}
